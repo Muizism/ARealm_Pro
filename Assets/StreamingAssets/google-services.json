@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "515085936203",
+    "firebase_url": "https://arealm-2dc27-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "arealm-2dc27",
+    "storage_bucket": "arealm-2dc27.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:515085936203:android:4f524efcd653927074cfce",
+        "android_client_info": {
+          "package_name": "com.company.ARealm"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "515085936203-3qb2m7aht48iuekqmpk2jg4for3i0egh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAryh77Y19V3WPlJy5nUFKUMB8it1LANcI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "515085936203-3qb2m7aht48iuekqmpk2jg4for3i0egh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
