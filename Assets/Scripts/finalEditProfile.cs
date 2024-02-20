@@ -17,9 +17,11 @@ public class UserProfileManager01 : MonoBehaviour
     public TMP_InputField typeInput;
     public TMP_InputField genderInput;
     public TMP_InputField interestsInput;
-    public RawImage profileImage;
+    public Image profileImage;
     public GameObject loader;
     public TMP_Text statusText;
+    public TMP_Text statusTextimage;
+
     public Button uploadImageButton;
 
     private DatabaseReference databaseReference;
@@ -49,7 +51,7 @@ public class UserProfileManager01 : MonoBehaviour
         else
         {
             Debug.Log("Camera permission undecided, waiting for permission...");
-            StartCoroutine(WaitForPermission());
+            /*StartCoroutine(WaitForPermission());*/
         }
     }
 
@@ -111,13 +113,16 @@ public class UserProfileManager01 : MonoBehaviour
             }
 
             Debug.Log($"Image captured at path: {path}");
+            statusTextimage.text = "Image uploaded sucessfully!";
+
+
 
             byte[] fileData = File.ReadAllBytes(path);
             Texture2D texture = new Texture2D(2, 2);
             if (texture.LoadImage(fileData))
             {
                 capturedImage = texture;
-                profileImage.texture = capturedImage; // Assign the texture to the RawImage component
+                profileImage.sprite = Sprite.Create(capturedImage, new Rect(0, 0, capturedImage.width, capturedImage.height), Vector2.zero);
                 Debug.Log("Image ready for upload.");
 
                 // Call method to upload image to Firebase (if needed right after capture)
@@ -140,11 +145,14 @@ public class UserProfileManager01 : MonoBehaviour
             {
                 DataSnapshot snapshot = task.Result;
                 UserData userData = JsonUtility.FromJson<UserData>(snapshot.GetRawJsonValue());
-                usernameInput.text = userData.Username;
+                usernameInput.text = userData.username;
+                Debug.Log("naam shayad yeh ha:" + userData.username);
                 ageInput.text = userData.Age.ToString();
+                Debug.Log("gender shayad yeh ha:" + userData.Gender);
                 genderInput.text = userData.Gender;
                 interestsInput.text = userData.Interests;
-                LoadProfileImage(userData.ImageUrl);
+                Debug.Log("Image url shayad yeh ha:"+userData.imageUrl);
+                LoadProfilePicture(userData.imageUrl);
             }
             else
             {
@@ -163,7 +171,7 @@ public class UserProfileManager01 : MonoBehaviour
 
         capturedImage.ReadPixels(new Rect(0, 0, width, height), 0, 0);
         capturedImage.Apply();
-        profileImage.texture = capturedImage;
+        profileImage.sprite = Sprite.Create(capturedImage, new Rect(0, 0, capturedImage.width, capturedImage.height), Vector2.zero);
     }
 
     public void UpdateUserData()
@@ -215,6 +223,7 @@ public class UserProfileManager01 : MonoBehaviour
                             if (updateTask.IsCompleted && !updateTask.IsFaulted)
                             {
                                 statusText.text = "Data updated successfully";
+                                Debug.Log("Data Updated.");
                             }
                             else
                             {
@@ -240,8 +249,30 @@ public class UserProfileManager01 : MonoBehaviour
         });
     }
 
-    void LoadProfileImage(string imageUrl)
+    private IEnumerator LoadProfilePicture(string imageUrl)
     {
+        Debug.Log("Loading profile picture from URL: " + imageUrl);
+        using (UnityWebRequest webRequest = UnityWebRequestTexture.GetTexture(imageUrl))
+        {
+            yield return webRequest.SendWebRequest();
+
+            if (webRequest.isNetworkError || webRequest.isHttpError)
+            {
+                Debug.LogError("Error loading image: " + webRequest.error);
+            }
+            else
+            {
+                Debug.Log("Image loaded successfully");
+                Texture2D texture = DownloadHandlerTexture.GetContent(webRequest);
+                profileImage.sprite = Sprite.Create(capturedImage, new Rect(0, 0, capturedImage.width, capturedImage.height), Vector2.zero);
+
+            }
+        }
+    }
+
+/*void LoadProfileImage(string imageUrl)
+    {
+        Debug.Log(imageUrl);
         StartCoroutine(DownloadImage(imageUrl));
     }
 
@@ -258,7 +289,7 @@ public class UserProfileManager01 : MonoBehaviour
         {
             profileImage.texture = ((DownloadHandlerTexture)request.downloadHandler).texture;
         }
-    }
+    }*/
 
     int GetDropdownIndex(TMP_Dropdown dropdown, string value)
     {
@@ -268,11 +299,11 @@ public class UserProfileManager01 : MonoBehaviour
     [System.Serializable]
     public class UserData
     {
-        public string Username;
+        public string username;
         public int Age;
         public string Gender;
         public string Type;
         public string Interests;
-        public string ImageUrl;
+        public string imageUrl;
     }
 }
