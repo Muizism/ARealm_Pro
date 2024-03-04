@@ -21,7 +21,6 @@ public class SignUpAndUpload03 : MonoBehaviour
     public Button SignUpButton;
     public Text signUpMessageText;
     public Text uploadMsg;
-
     private FirebaseAuth auth;
     private DatabaseReference databaseReference;
     private byte[] imageBytes;
@@ -132,39 +131,40 @@ public class SignUpAndUpload03 : MonoBehaviour
         }, maxSize: -1);
     }
 
-    /*    private async Task<string> UploadToAWS(byte[] imageBytes, string userId)
-        {
-            string apiEndpoint = $"https://qkwqrr0387.execute-api.us-east-1.amazonaws.com/arealm/arealm/{userId}";
-            Debug.Log("API endpoint: " + apiEndpoint);
+    /*  private async Task<string> UploadToAWS(byte[] imageBytes, string userId)
+      {
+          string apiEndpoint = $"https://qkwqrr0387.execute-api.us-east-1.amazonaws.com/arealm/arealm/{userId}";
+          Debug.Log("API endpoint: " + apiEndpoint);
 
-            using (UnityWebRequest request = new UnityWebRequest(apiEndpoint, "PUT"))
-            {
-                request.uploadHandler = new UploadHandlerRaw(imageBytes);
-                request.downloadHandler = new DownloadHandlerBuffer();
-                request.SetRequestHeader("Content-Type", "image/png");
+          using (UnityWebRequest request = new UnityWebRequest(apiEndpoint, "PUT"))
+          {
+              request.uploadHandler = new UploadHandlerRaw(imageBytes);
+              request.downloadHandler = new DownloadHandlerBuffer();
+              request.SetRequestHeader("Content-Type", "image/png");
 
-                Debug.Log("Sending UnityWebRequest...");
+              Debug.Log("Sending UnityWebRequest...");
 
-                yield return request.SendWebRequest(); ;
+              yield return request.SendWebRequest(); ;
 
-                if (request.result != UnityWebRequest.Result.Success)
-                {
-                    Debug.LogError("Image upload failed: " + request.error);
+              if (request.result != UnityWebRequest.Result.Success)
+              {
+                  Debug.LogError("Image upload failed: " + request.error);
 
-                }
-                else
-                {
-                    string responseUrl = request.downloadHandler.text;
-                    Debug.Log("Image uploaded successfully. Image URL: " + responseUrl);
+              }
+              else
+              {
+                  string responseUrl = request.downloadHandler.text;
+                  Debug.Log("Image uploaded successfully. Image URL: " + responseUrl);
 
-                }
-            }
-        }
-    */
+              }
+          }
+      }
+  */
 
-   /* private IEnumerator UploadProfilePictureAWS(byte[] imageBytes, string userId)
+    private IEnumerator UploadProfilePictureAWS(byte[] imageBytes, string userId)
     {
         Debug.Log("Starting image upload...");
+
 
         if (imageBytes == null || imageBytes.Length == 0)
         {
@@ -173,7 +173,7 @@ public class SignUpAndUpload03 : MonoBehaviour
         }
 
         string filename = $"{Guid.NewGuid().ToString()}.png";
-        string apiEndpoint = $"https://qkwqrr0387.execute-api.us-east-1.amazonaws.com/arealm/arealm/{userId},{filename}";
+        string apiEndpoint = $"https://qkwqrr0387.execute-api.us-east-1.amazonaws.com/arealm/{userId},{filename}";
         Debug.Log("API endpoint: " + apiEndpoint);
 
         using (UnityWebRequest request = new UnityWebRequest(apiEndpoint, "PUT"))
@@ -204,7 +204,7 @@ public class SignUpAndUpload03 : MonoBehaviour
             }
         }
     }
-*/
+
     private async Task<string> UploadProfilePictureAsync(byte[] imageBytes)
     {
         try
@@ -221,8 +221,17 @@ public class SignUpAndUpload03 : MonoBehaviour
 
             Debug.Log("Uploading image to Firebase...");
             var uploadTask = imageRef.PutBytesAsync(imageBytes);
+            Debug.Log("Sending to AWS");
+            string userId = "123";
+            UploadProfilePictureAWS(imageBytes, userId);
+        
             await uploadTask;
-
+           
+            if (uploadTask.Exception != null)
+            {
+                Debug.LogError("Image upload failed: " + uploadTask.Exception);
+                return null;
+            }
             if (uploadTask.Exception != null)
             {
                 Debug.LogError("Image upload failed: " + uploadTask.Exception);
@@ -236,6 +245,7 @@ public class SignUpAndUpload03 : MonoBehaviour
             Debug.LogError("Exception occurred during upload: " + e.Message);
             return null;
         }
+          
     }
 
     public async void OnSignUpButtonClicked()
@@ -261,7 +271,7 @@ public class SignUpAndUpload03 : MonoBehaviour
             AuthResult authResult = await auth.CreateUserWithEmailAndPasswordAsync(email, password);
             FirebaseUser newUser = authResult.User;
             string userId = newUser.UserId;
-
+          /*  UploadProfilePictureAWS(imageBytes, userId);*/
             string imageUrl = await UploadProfilePictureAsync(imageBytes);
             if (string.IsNullOrEmpty(imageUrl))
             {
@@ -273,6 +283,8 @@ public class SignUpAndUpload03 : MonoBehaviour
             }
 
             WriteNewUser(userId, name, email, imageUrl);
+          
+          
 
             Debug.Log("Sign-up successful! User ID: " + userId);
             signUpMessageText.text = "Profile created successfully!";
