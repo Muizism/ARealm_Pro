@@ -4,7 +4,31 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 0
+    path: Assets/Scenes/SplashScreen.unity
+    guid: 22f1031a838f6144383df6a2a8d9ae7d
+  - enabled: 0
+    path: Assets/Scenes/login.unity
+    guid: c3402fb68d4363f4fbeb884b25e8a39d
+  - enabled: 0
+    path: Assets/Scenes/signup.unity
+    guid: 5635435358066624c987d8cade93cd88
+  - enabled: 1
+    path: Assets/Scenes/HomeScreen.unity
+    guid: 69f51d2561e7df548aad8728cea2b059
+  - enabled: 0
+    path: Assets/Scenes/Profile.unity
+    guid: ebc7ea16ae5c9bc4aa66441b506da09c
+  - enabled: 0
+    path: Assets/Scenes/Image Recognition.unity
+    guid: 9362ebd373db6594e81eb88d91f94939
+  - enabled: 0
+    path: Assets/Scenes/Edit Profile.unity
+    guid: 7bd6d5b6e57ef794b8ae26f9cb0cefe7
+  - enabled: 0
+    path: Assets/Scenes/Chatbot.unity
+    guid: 32a5a89b29721884c8704c96ae493483
   m_configObjects:
     UnityEditor.XR.ARCore.ARCoreSettings: {fileID: 11400000, guid: 45fd4f9964cf7e94a89e3df265811801, type: 2}
     UnityEditor.XR.ARKit.ARKitSettings: {fileID: 11400000, guid: f36ad8329084e15469d03dc94c7fdf4e, type: 2}
