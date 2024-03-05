@@ -25,6 +25,7 @@ public class CaptureAndSendImageScript02 : MonoBehaviour
     public TextMeshProUGUI typeText;
     public TextMeshProUGUI interestsText;
     public TextMeshProUGUI additionalText;
+    public TextMeshProUGUI DisplayResponse;
 
     private DatabaseReference databaseReference;
     private string lambdaEndpoint = "https://yopit6ndtj.execute-api.us-east-1.amazonaws.com/default/face";
@@ -60,8 +61,9 @@ public class CaptureAndSendImageScript02 : MonoBehaviour
 
    private IEnumerator sending_face(Texture2D image)
     {
-        byte[] imageBytes = image.GetRawTextureData();
-        UnityWebRequest request = new UnityWebRequest(lambdaEndpoint, "POST")
+
+        byte[] imageBytes = image.EncodeToPNG();
+        UnityWebRequest request = new UnityWebRequest(lambdaEndpointForTextDetection, "POST")
         {
             uploadHandler = new UploadHandlerRaw(imageBytes),
             downloadHandler = new DownloadHandlerBuffer()
