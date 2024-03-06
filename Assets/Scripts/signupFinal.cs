@@ -173,7 +173,7 @@ public class SignUpAndUpload03 : MonoBehaviour
         }
 
         string filename = $"{Guid.NewGuid().ToString()}.png";
-        string apiEndpoint = $"https://qkwqrr0387.execute-api.us-east-1.amazonaws.com/arealm/{userId},{filename}";
+        string apiEndpoint = $"https://qkwqrr0387.execute-api.us-east-1.amazonaws.com/arealm/arealm/{userId},{filename}";
         Debug.Log("API endpoint: " + apiEndpoint);
 
         using (UnityWebRequest request = new UnityWebRequest(apiEndpoint, "PUT"))

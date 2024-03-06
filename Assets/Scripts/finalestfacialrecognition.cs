@@ -37,11 +37,18 @@ public class CaptureAndSendImageScript02 : MonoBehaviour
     {
         databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
         arCameraManager = FindObjectOfType<ARCameraManager>();
-        tapButton.onClick.AddListener(OnScreenTapped);
+        /*tapButton.onClick.AddListener(OnScreenTapped);*/
         cancelButton.onClick.AddListener(CancelButtonClicked);
         showButton.onClick.AddListener(ShowButtonClicked);
     }
 
+    void Update()
+    {
+        if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
+        {
+            OnScreenTapped();
+        }
+    }
     void OnScreenTapped()
     {
         StartCoroutine(CaptureAndSendImage());
@@ -56,10 +63,10 @@ public class CaptureAndSendImageScript02 : MonoBehaviour
         captureDebugText.text = "Image captured.";
         Debug.Log("Image captured.");
       /*  yield return StartCoroutine(SendImageToLambdaForTextDetection(capturedImage));*/
-        yield return StartCoroutine(sending_face(capturedImage));
+        yield return StartCoroutine(sending_image(capturedImage));
     }
 
-   private IEnumerator sending_face(Texture2D image)
+   private IEnumerator sending_image(Texture2D image)
     {
 
         byte[] imageBytes = image.EncodeToPNG();
@@ -73,13 +80,35 @@ public class CaptureAndSendImageScript02 : MonoBehaviour
         yield return request.SendWebRequest();
         if (request.result == UnityWebRequest.Result.Success)
         {
-            responseDebugText.text = "Response: " + request.downloadHandler.text;
-            Debug.Log("Lambda response: " + request.downloadHandler.text);
+            var jsonResponse = request.downloadHandler.text;
+            responseDebugText.text = "Response: " + jsonResponse;
+            Debug.Log("Lambda response: " + jsonResponse);
+
+            // Parse JSON response
+            try
+            {
+                var responseObject = JsonUtility.FromJson<YourResponseObject>(jsonResponse);
+                if (responseObject != null)
+                {
+                    // Handle your response, e.g., update UI
+                    DisplayResponse.text = "Room: " + responseObject.Room; // Adjust according to your actual JSON structure
+                }
+                else
+                {
+                    DisplayResponse.text = "No room information found.";
+                }
+            }
+            catch (System.Exception ex)
+            {
+                Debug.LogError("Error parsing JSON: " + ex.Message);
+                DisplayResponse.text = "Error parsing response.";
+            }
         }
         else
         {
             responseDebugText.text = "Failed to send image: " + request.error;
             Debug.LogError("Failed to send image: " + request.error);
+            DisplayResponse.text = "Failed to send image: " + request.error;
         }
     }
 
@@ -100,5 +129,11 @@ public class CaptureAndSendImageScript02 : MonoBehaviour
     void ShowButtonClicked()
     {
         Debug.Log("Show button clicked.");
+    }
+    [System.Serializable]
+    public class YourResponseObject
+    {
+        public string Room;
+        // Add other fields as per your JSON response...
     }
 }
