@@ -1,139 +1,130 @@
-using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.XR.ARFoundation;
-using System.Collections;
-using TMPro;
-using System.Net.Http;
-using System.Threading.Tasks;
-using Firebase.Database;
-using UnityEngine.Networking;
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+using TMPro;
+using UnityEngine;
+using UnityEngine.Networking;
+using UnityEngine.UI;
 
-public class CaptureAndSendImageScript02 : MonoBehaviour
+public class finalfacialrecognition : MonoBehaviour
 {
-    public ARCameraManager arCameraManager;
-    public Button tapButton;
-    public Button cancelButton;
-    public Button showButton;
-    public TextMeshProUGUI debugText;
-    public TextMeshProUGUI captureDebugText;
-    public TextMeshProUGUI sendDebugText;
-    public TextMeshProUGUI responseDebugText;
-    public TextMeshProUGUI responseDebug01Text;
-    public TextMeshProUGUI userNameText;
-    public TextMeshProUGUI ageText;
-    public TextMeshProUGUI typeText;
-    public TextMeshProUGUI interestsText;
-    public TextMeshProUGUI additionalText;
-    public TextMeshProUGUI DisplayResponse;
+    [SerializeField] private TextMeshProUGUI roomText;
+    [SerializeField] private TextMeshProUGUI time830_950Text;
+    [SerializeField] private GameObject scheduleCanvas;
+    [SerializeField] private GameObject icon;
 
-    private DatabaseReference databaseReference;
-    private string lambdaEndpoint = "https://yopit6ndtj.execute-api.us-east-1.amazonaws.com/default/face";
-    private string lambdaEndpointForTextDetection = "https://nwt9wmn64g.execute-api.us-east-1.amazonaws.com/default/ImageRecognition";
-    private Texture2D capturedImage;
-    string userId = "EDLcjHKt1FNsma50KlCjr2hmVA32";
 
-    void Start()
-    {
-        databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
-        arCameraManager = FindObjectOfType<ARCameraManager>();
-        /*tapButton.onClick.AddListener(OnScreenTapped);*/
-        cancelButton.onClick.AddListener(CancelButtonClicked);
-        showButton.onClick.AddListener(ShowButtonClicked);
-    }
+
+
+
+    private string awsLambdaEndpoint = "https://nwt9wmn64g.execute-api.us-east-1.amazonaws.com/default/ImageRecognition";
+    /*string filePath = "C:\\Users\\Abdul Moiz\\Downloads\\check.jpg";*/
 
     void Update()
     {
-        if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
+        // Capture screen on mouse click
+        if (Input.GetMouseButtonDown(0))
         {
-            OnScreenTapped();
+           
+                Debug.Log("Mouse clicked, capturing screen...");
+                StartCoroutine(CaptureAndSendScreenshot());
+            
+          
+            scheduleCanvas.SetActive(true);
+           /* icon.SetActive(true);*/
+            
+
         }
     }
-    void OnScreenTapped()
-    {
-        StartCoroutine(CaptureAndSendImage());
-    }
 
-    IEnumerator CaptureAndSendImage()
+    private IEnumerator CaptureAndSendScreenshot()
     {
+        Debug.Log("Preparing to capture screenshot...");
         yield return new WaitForEndOfFrame();
-        capturedImage = new Texture2D(Screen.width, Screen.height, TextureFormat.RGB24, false);
-        capturedImage.ReadPixels(new Rect(0, 0, Screen.width, Screen.height), 0, 0);
-        capturedImage.Apply();
-        captureDebugText.text = "Image captured.";
-        Debug.Log("Image captured.");
-      /*  yield return StartCoroutine(SendImageToLambdaForTextDetection(capturedImage));*/
-        yield return StartCoroutine(sending_image(capturedImage));
+
+        Debug.Log("Capturing screenshot...");
+        Texture2D screenImage = new Texture2D(Screen.width, Screen.height, TextureFormat.RGB24, false);
+        screenImage.ReadPixels(new Rect(0, 0, Screen.width, Screen.height), 0, 0);
+        screenImage.Apply();
+
+        Debug.Log("Screenshot captured.");
+        byte[] imageBytes = screenImage.EncodeToPNG();
+        Debug.Log("Screenshot encoded to PNG format.");
+
+        Debug.Log("Sending image to AWS Lambda...");
+        yield return StartCoroutine(SendImageToAWSLambda(imageBytes));
+
+        Destroy(screenImage);
+        Debug.Log("Texture destroyed and memory cleaned up.");
+
     }
-
-   private IEnumerator sending_image(Texture2D image)
+    public void DisplayScheduleOnCanvas(Schedule schedule)
     {
+        roomText.text = $"Room: {schedule.Room}";
 
-        byte[] imageBytes = image.EncodeToPNG();
-        UnityWebRequest request = new UnityWebRequest(lambdaEndpointForTextDetection, "POST")
+        foreach (var timeSlot in schedule.TimeSlots)
         {
-            uploadHandler = new UploadHandlerRaw(imageBytes),
-            downloadHandler = new DownloadHandlerBuffer()
-        };
-        request.SetRequestHeader("Content-Type", "application/octet-stream");
-        sendDebugText.text = "Sending image...";
-        yield return request.SendWebRequest();
-        if (request.result == UnityWebRequest.Result.Success)
-        {
-            var jsonResponse = request.downloadHandler.text;
-            responseDebugText.text = "Response: " + jsonResponse;
-            Debug.Log("Lambda response: " + jsonResponse);
+            switch (timeSlot.Key)
+            {
+                case "08:30-09:50":
+                    time830_950Text.text = timeSlot.Value;
+                    break;
 
-            // Parse JSON response
-            try
-            {
-                var responseObject = JsonUtility.FromJson<YourResponseObject>(jsonResponse);
-                if (responseObject != null)
-                {
-                    // Handle your response, e.g., update UI
-                    DisplayResponse.text = "Room: " + responseObject.Room; // Adjust according to your actual JSON structure
-                }
-                else
-                {
-                    DisplayResponse.text = "No room information found.";
-                }
+
+
             }
-            catch (System.Exception ex)
-            {
-                Debug.LogError("Error parsing JSON: " + ex.Message);
-                DisplayResponse.text = "Error parsing response.";
-            }
-        }
-        else
-        {
-            responseDebugText.text = "Failed to send image: " + request.error;
-            Debug.LogError("Failed to send image: " + request.error);
-            DisplayResponse.text = "Failed to send image: " + request.error;
+
         }
     }
 
-   
-
-    void CancelButtonClicked()
+    private IEnumerator SendImageToAWSLambda(byte[] imageBytes)
     {
-        cancelButton.gameObject.SetActive(false);
-        showButton.gameObject.SetActive(false);
-        additionalText.gameObject.SetActive(false);
-        userNameText.gameObject.SetActive(false);
-        ageText.gameObject.SetActive(false);
-        typeText.gameObject.SetActive(false);
-        interestsText.gameObject.SetActive(false);
-        Debug.Log("Cancel button clicked, UI elements hidden.");
-    }
+        
+        using (UnityWebRequest www = new UnityWebRequest(awsLambdaEndpoint, "POST"))
+        {
+            www.uploadHandler = (UploadHandler)new UploadHandlerRaw(imageBytes);
+            www.downloadHandler = (DownloadHandler)new DownloadHandlerBuffer();
+            www.SetRequestHeader("Content-Type", "application/octet-stream");
 
-    void ShowButtonClicked()
-    {
-        Debug.Log("Show button clicked.");
+            Debug.Log("Sending image data...");
+            yield return www.SendWebRequest();
+
+            if (www.result == UnityWebRequest.Result.Success)
+            {
+                var schedule = JsonUtility.FromJson<Schedule>(www.downloadHandler.text);
+                string jsonResponse = www.downloadHandler.text.Trim('{', '}');
+                string[] jsonParts = jsonResponse.Split(',');
+                string formattedResponse = string.Join("\n\n", jsonParts);
+                time830_950Text.text = formattedResponse;
+                DisplayScheduleOnCanvas(schedule);
+                Debug.Log("Image sent successfully!");
+                Debug.Log($"Response from AWS Lambda: {www.downloadHandler.text}");
+            }
+            else if (www.responseCode == 404)
+            {
+                Debug.Log("No room information found.");
+            }
+            else
+            {
+                Debug.LogError($"Error sending image to AWS Lambda: {www.error}");
+            }
+        }
+
     }
-    [System.Serializable]
-    public class YourResponseObject
+    [Serializable]
+    public class ImagePayload
+    {
+        public bool isBase64Encoded;
+        public string body;
+    }
+    [Serializable]
+    public class Schedule
     {
         public string Room;
-        // Add other fields as per your JSON response...
+        public Dictionary<string, string> TimeSlots = new Dictionary<string, string>();
     }
 }
+
+
+
