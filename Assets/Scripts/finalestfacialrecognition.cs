@@ -21,22 +21,31 @@ public class finalfacialrecognition : MonoBehaviour
     private string awsLambdaEndpoint = "https://nwt9wmn64g.execute-api.us-east-1.amazonaws.com/default/ImageRecognition";
     /*string filePath = "C:\\Users\\Abdul Moiz\\Downloads\\check.jpg";*/
 
+ 
     void Update()
     {
-        // Capture screen on mouse click
-        if (Input.GetMouseButtonDown(0))
+        // Check if there is any touch input
+        if (Input.touchCount > 0)
         {
-           
-                Debug.Log("Mouse clicked, capturing screen...");
-                StartCoroutine(CaptureAndSendScreenshot());
-            
-          
-            scheduleCanvas.SetActive(true);
-           /* icon.SetActive(true);*/
-            
+            // Get the first touch
+            Touch touch = Input.GetTouch(0);
 
+            // Check if the touch phase is began (finger just touched the screen)
+            if (touch.phase == TouchPhase.Began)
+            {
+                // Capture the screen when the touch begins
+                Debug.Log("Screen tapped, capturing screen...");
+                StartCoroutine(CaptureAndSendScreenshot());
+
+                // You can also perform other actions here if needed
+                scheduleCanvas.SetActive(true);
+                /* icon.SetActive(true);*/
+            }
         }
     }
+
+
+
 
     private IEnumerator CaptureAndSendScreenshot()
     {
@@ -53,7 +62,7 @@ public class finalfacialrecognition : MonoBehaviour
         Debug.Log("Screenshot encoded to PNG format.");
 
         Debug.Log("Sending image to AWS Lambda...");
-        yield return StartCoroutine(SendImageToAWSLambda(imageBytes));
+        yield return StartCoroutine(SendImageToAWSLambda(imageBytes ));
 
         Destroy(screenImage);
         Debug.Log("Texture destroyed and memory cleaned up.");
