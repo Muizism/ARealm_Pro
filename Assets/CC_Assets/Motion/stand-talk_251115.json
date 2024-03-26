@@ -1,0 +1,17 @@
+﻿{
+    "stand-talk_251115": {
+        "Version": "1.10.1822.1",
+        "Scene": {
+            "Name": true,
+            "SupportShaderSelect": true
+        },
+        "Export Directory": "C:/RLConverterServices/RLConverter/TempData/Convert/7286c11a32507ad7/JICf110e646314a25808",
+        "Object": {
+            "stand-talk_251115": {
+                "Generation": "ActorScan",
+                "Physics": {},
+                "Meshes": {}
+            }
+        }
+    }
+}
