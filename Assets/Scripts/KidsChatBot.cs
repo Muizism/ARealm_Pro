@@ -156,11 +156,25 @@ public class KidsChatBot : MonoBehaviour
     private AudioSource audioSource;
     private Color originalButtonColor;
     public TMP_Text text;
+   
+
 
     void Start()
     {
         originalButtonColor = startSpeakingButton.image.color;
         audioSource = GetComponent<AudioSource>();
+      
+
+        // Ensure audioSource is not null
+        if (audioSource == null)
+        {
+            Debug.LogError("AudioSource reference not set!");
+            return;
+        }
+
+        // Disable animator initially
+    
+
     }
 
     public void OnStartSpeakingClick()
@@ -249,7 +263,7 @@ public class KidsChatBot : MonoBehaviour
         form.AddBinaryData("audio", audioBytes, "recording.wav", "audio/wav");
 
         // Create a UnityWebRequest to post the form data to the server
-        UnityWebRequest www = UnityWebRequest.Post("http://127.0.0.1:5000/process_audio", form);
+        UnityWebRequest www = UnityWebRequest.Post("http://44.203.153.218:8000/process_audio", form);
         www.downloadHandler = new DownloadHandlerAudioClip(www.url, AudioType.MPEG);
 
         // Send the request and wait for the response
@@ -267,6 +281,8 @@ public class KidsChatBot : MonoBehaviour
             AudioSource audioSource = GetComponent<AudioSource>();
             audioSource.clip = receivedClip;
             text.text = "Hafiz Umar speaking..";
+          
+            Debug.Log("Animator is enabled");
             audioSource.Play();
 
 
