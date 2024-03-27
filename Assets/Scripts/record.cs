@@ -5,13 +5,14 @@ using UnityEngine.UI;
 using System.IO;
 using System.Text;
 using TMPro;
+using UnityEngine.Networking;
 
 public class AudioRecorder : MonoBehaviour
 {
     public Button recordButton;
     private AudioClip recordedClip;
     private const int SampleRate = 44100;
-    private const int ClipLength = 7;
+    private const int ClipLength = 15;
     public TextMeshProUGUI statusText;
     private void Start()
     {
@@ -24,6 +25,8 @@ public class AudioRecorder : MonoBehaviour
         recordedClip = Microphone.Start(null, false, ClipLength, SampleRate);
         Invoke("StopRecording", ClipLength);
         statusText.text = "Recording audio...";
+       
+
     }
 
     private void StopRecording()
@@ -32,15 +35,72 @@ public class AudioRecorder : MonoBehaviour
         {
             Microphone.End(null);
             SaveAudioClip(recordedClip);
+            statusText.text = "Recording stopped...";
+            StartCoroutine(WaitForRecordingToCompleteAndUpload());
         }
     }
 
     private void SaveAudioClip(AudioClip clip)
     {
         var filePath = Path.Combine(Application.persistentDataPath, "recordedAudio.wav");
+        
         SaveWavFile(filePath, clip);
     }
+    IEnumerator WaitForRecordingToCompleteAndUpload()
+    {
+        while (Microphone.IsRecording(null))
+        {
+            yield return null;
+        }
 
+        byte[] audioBytes;
+        string filepath;
+        int length, samples;
+
+        // Convert AudioClip to WAV bytes
+        audioBytes = WavUtility.FromAudioClip(recordedClip, out filepath, out length, out samples);
+        StartCoroutine(UploadAudio(audioBytes));
+    }
+    IEnumerator UploadAudio(byte[] audioBytes)
+    {
+
+        // Create form and add the WAV file byte array to it
+        WWWForm form = new WWWForm();
+        form.AddBinaryData("audio", audioBytes, "recording.wav", "audio/wav");
+
+        // Create a UnityWebRequest to post the form data to the server
+        UnityWebRequest www = UnityWebRequest.Post("http://127.0.0.1:5000/process_audio", form);
+        www.downloadHandler = new DownloadHandlerAudioClip(www.url, AudioType.MPEG);
+
+        // Send the request and wait for the response
+        yield return www.SendWebRequest();
+
+        if (www.result != UnityWebRequest.Result.Success)
+        {
+            Debug.LogError(www.error);
+            Debug.Log("sending");
+        }
+        else
+        {
+
+            AudioClip receivedClip = DownloadHandlerAudioClip.GetContent(www);
+            AudioSource audioSource = GetComponent<AudioSource>();
+            audioSource.clip = receivedClip;
+            audioSource.Play();
+
+            /*    Debug.Log("Audio processed successfully.");
+                AudioClip receivedClip = DownloadHandlerAudioClip.GetContent(www);
+                if (audioSource != null && receivedClip != null)
+                {
+                    audioSource.clip = receivedClip;
+                    audioSource.Play();
+                }
+                else
+                {
+                    Debug.LogError("Error playing back the received audio clip.");
+                }*/
+        }
+    }
     private void SaveWavFile(string filePath, AudioClip clip)
     {
         // Create header information for WAV format
