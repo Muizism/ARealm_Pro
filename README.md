@@ -17,7 +17,3 @@ ARealm aims to transform the campus experience by blending cutting-edge AR innov
 # Contributing
 We welcome contributions to ARealm! Whether you're interested in adding new features, fixing bugs, or improving documentation, your contributions are valuable to us. Please see our Contribution Guidelines for more information on how to contribute.
 
-# License
-ARealm is licensed under the MIT License.
-
-Feel free to customize this README file further to include specific instructions for setting up and running the project, installation requirements, usage guidelines, and any other relevant information.
