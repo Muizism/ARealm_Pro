@@ -18,10 +18,11 @@ public class finalfacialrecognition : MonoBehaviour
 
 
 
-    private string awsLambdaEndpoint = "https://nwt9wmn64g.execute-api.us-east-1.amazonaws.com/default/ImageRecognition";
-    /*string filePath = "C:\\Users\\Abdul Moiz\\Downloads\\check.jpg";*/
 
- 
+    private string awsLambdaEndpoint = "https://nwt9wmn64g.execute-api.us-east-1.amazonaws.com/default/ImageRecognition";
+  /*  string filePath = "C:\\Users\\Abdul Moiz\\Downloads\\check.jpg";*/
+
+
     void Update()
     {
         // Check if there is any touch input
@@ -36,6 +37,7 @@ public class finalfacialrecognition : MonoBehaviour
                 // Capture the screen when the touch begins
                 Debug.Log("Screen tapped, capturing screen...");
                 StartCoroutine(CaptureAndSendScreenshot());
+                /* StartCoroutine(SendImageFromFile());*/
 
                 // You can also perform other actions here if needed
                 scheduleCanvas.SetActive(true);
@@ -49,25 +51,53 @@ public class finalfacialrecognition : MonoBehaviour
 
     private IEnumerator CaptureAndSendScreenshot()
     {
-        Debug.Log("Preparing to capture screenshot...");
         yield return new WaitForEndOfFrame();
 
-        Debug.Log("Capturing screenshot...");
-        Texture2D screenImage = new Texture2D(Screen.width, Screen.height, TextureFormat.RGB24, false);
-        screenImage.ReadPixels(new Rect(0, 0, Screen.width, Screen.height), 0, 0);
-        screenImage.Apply();
+        Camera camera = Camera.main;
+        int width = Screen.width;
+        int height = Screen.height;
+        RenderTexture rt = new RenderTexture(width, height, 24);
+        camera.targetTexture = rt;
 
-        Debug.Log("Screenshot captured.");
-        byte[] imageBytes = screenImage.EncodeToPNG();
-        Debug.Log("Screenshot encoded to PNG format.");
+        RenderTexture currentRT = RenderTexture.active;
+        RenderTexture.active = rt;
 
+        camera.Render();
+
+        Texture2D image = new Texture2D(width, height, TextureFormat.RGB24, false);
+        image.ReadPixels(new Rect(0, 0, width, height), 0, 0);
+        image.Apply();
+
+        camera.targetTexture = null;
+        RenderTexture.active = currentRT;
+
+        byte[] imageBytes = image.EncodeToPNG();
+        Destroy(image);
+
+        Debug.Log("Image captured and encoded to PNG format.");
         Debug.Log("Sending image to AWS Lambda...");
-        yield return StartCoroutine(SendImageToAWSLambda(imageBytes ));
-
-        Destroy(screenImage);
-        Debug.Log("Texture destroyed and memory cleaned up.");
+        yield return StartCoroutine(SendImageToAWSLambda(imageBytes));
 
     }
+
+ /*   private IEnumerator SendImageFromFile()
+    {
+        Debug.Log("Reading image from file...");
+        // Ensure the filePath is correct and accessible
+        if (File.Exists(filePath))
+        {
+            byte[] imageBytes = File.ReadAllBytes(filePath);
+            Debug.Log("Image read from file successfully.");
+
+            // Now send this imageBytes array to AWS Lambda
+            Debug.Log("Sending image to AWS Lambda...");
+            yield return StartCoroutine(SendImageToAWSLambda(imageBytes));
+        }
+        else
+        {
+            Debug.LogError($"File not found at path: {filePath}");
+        }
+    }*/
     public void DisplayScheduleOnCanvas(Schedule schedule)
     {
         roomText.text = $"Room: {schedule.Room}";
@@ -113,6 +143,7 @@ public class finalfacialrecognition : MonoBehaviour
             else if (www.responseCode == 404)
             {
                 Debug.Log("No room information found.");
+                roomText.text = ("No room information found");
             }
             else
             {

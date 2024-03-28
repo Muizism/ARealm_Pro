@@ -443,6 +443,8 @@ GameObject:
   - component: {fileID: 105396580}
   - component: {fileID: 105396579}
   - component: {fileID: 105396584}
+  - component: {fileID: 105396586}
+  - component: {fileID: 105396585}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -568,6 +570,47 @@ MonoBehaviour:
   time830_950Text: {fileID: 1372977860}
   scheduleCanvas: {fileID: 539101800}
   icon: {fileID: 564289862}
+--- !u!114 &105396585
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 105396577}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 4
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 485656664}
+          m_TargetAssemblyTypeName: 
+          m_MethodName: 
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: 
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+--- !u!114 &105396586
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 105396577}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5e8cb3b70750274a91fb3d845cf9e09, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &155631760
 GameObject:
   m_ObjectHideFlags: 0
@@ -1766,16 +1809,16 @@ RectTransform:
   m_GameObject: {fileID: 539101800}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.3131999, y: 1.3340728, z: 1.3131999}
+  m_LocalScale: {x: 0.5575669, y: 0.55756694, z: 0.5575669}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1086123358}
   - {fileID: 1166176496}
-  m_Father: {fileID: 1431619296}
+  m_Father: {fileID: 1440580141}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 563.5229, y: 2074}
+  m_AnchoredPosition: {x: 298.44562, y: 997.97034}
   m_SizeDelta: {x: 1070.5284, y: 2295.6887}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &545488486
@@ -3819,7 +3862,6 @@ MonoBehaviour:
     m_Interactions: 
     m_SingletonActionBindings: []
     m_Flags: 0
-  m_HasMigratedActions: 1
 --- !u!114 &950869113
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4130,7 +4172,7 @@ GameObject:
   - component: {fileID: 1040359712}
   - component: {fileID: 1040359713}
   - component: {fileID: 1040359715}
-  - component: {fileID: 1040359714}
+  - component: {fileID: 1040359718}
   m_Layer: 0
   m_Name: XR Origin
   m_TagString: Untagged
@@ -4171,7 +4213,7 @@ MonoBehaviour:
   m_CameraFloorOffsetObject: {fileID: 1431619295}
   m_RequestedTrackingOriginMode: 0
   m_CameraYOffset: 1.1176
---- !u!114 &1040359714
+--- !u!114 &1040359715
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4183,8 +4225,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa17d122634046b4a8e23048891fafc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_RaycastPrefab: {fileID: 539101800}
---- !u!114 &1040359715
+  m_RaycastPrefab: {fileID: 0}
+--- !u!114 &1040359718
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4193,11 +4235,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1040359711}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e1760703bbd54c04488a8d10600262ab, type: 3}
+  m_Script: {fileID: 11500000, guid: 7ab0e80cee9cc1d44928bfe488dd1e2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_PlanePrefab: {fileID: 539101800}
-  m_DetectionMode: 2
+  m_PointCloudPrefab: {fileID: 0}
 --- !u!1 &1042680287
 GameObject:
   m_ObjectHideFlags: 0
@@ -5601,7 +5642,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 950869116}
-  - {fileID: 539101804}
   m_Father: {fileID: 1040359712}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1440580137
@@ -5704,6 +5744,7 @@ RectTransform:
   - {fileID: 545488489}
   - {fileID: 564289863}
   - {fileID: 105396582}
+  - {fileID: 539101804}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
