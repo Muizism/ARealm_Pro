@@ -17,6 +17,19 @@ PluginImporter:
   validateReferences: 1
   platformData:
   - first:
+      : Any
+    second:
+      enabled: 0
+      settings:
+        Exclude Android: 0
+        Exclude Editor: 0
+        Exclude Linux64: 1
+        Exclude OSXUniversal: 1
+        Exclude WebGL: 1
+        Exclude Win: 1
+        Exclude Win64: 1
+        Exclude WindowsStoreApps: 1
+  - first:
       : Linux
     second:
       enabled: 0
@@ -55,7 +68,8 @@ PluginImporter:
     second:
       enabled: 0
       settings:
-        CPU: AnyCPU
+        AndroidSharedLibraryType: Executable
+        CPU: ARMv7
   - first:
       Any: 
     second:
@@ -99,6 +113,10 @@ PluginImporter:
       enabled: 0
       settings:
         CPU: AnyCPU
+        DontProcess: false
+        PlaceholderPath: 
+        SDK: AnySDK
+        ScriptingBackend: AnyScriptingBackend
   - first:
       iPhone: iOS
     second:

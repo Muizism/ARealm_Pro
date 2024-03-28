@@ -1,19 +1,49 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.Android;
+using UnityEngine.UI; // Required for permission checks on Android
 
 public class ModelAnimation : MonoBehaviour
 {
     public Animator animator; // Reference to the Animator component
     public AudioSource audioSource; // Reference to the AudioSource component
 
-    // Start is called before the first frame update
+
+    private void AskForPermissions()
+    {
+        // Permissions required by the app
+        string[] permissions = new string[]
+        {
+            Permission.Microphone,
+            Permission.Camera,
+            Permission.ExternalStorageWrite,
+            Permission.ExternalStorageRead,
+           
+            // Add other permissions here
+            // Example: Permission.ExternalStorageWrite
+        };
+
+        foreach (var permission in permissions)
+        {
+            if (!Permission.HasUserAuthorizedPermission(permission))
+            {
+                // This will prompt the user for permission
+                Permission.RequestUserPermission(permission);
+            }
+        }
+    }
+
     void Start()
     {
+        AskForPermissions(); // Ask for all required permissions at start
+
         // Ensure animator is not null
         if (animator == null)
         {
             Debug.LogError("Animator reference not set!");
+           
             return;
         }
 
@@ -21,6 +51,7 @@ public class ModelAnimation : MonoBehaviour
         if (audioSource == null)
         {
             Debug.LogError("AudioSource reference not set!");
+          
             return;
         }
 
@@ -28,9 +59,12 @@ public class ModelAnimation : MonoBehaviour
         animator.enabled = false;
     }
 
-    // Update is called once per frame
     void Update()
     {
+        // Debugging to ensure the AudioSource is working as expected
+        Debug.Log($"AudioSource isPlaying: {audioSource.isPlaying}");
+       
+
         // Check if the audio source is playing
         if (audioSource.isPlaying)
         {
@@ -44,7 +78,6 @@ public class ModelAnimation : MonoBehaviour
         {
             // If the audio source is not playing, disable the animator
             animator.enabled = false;
-          
         }
     }
 }

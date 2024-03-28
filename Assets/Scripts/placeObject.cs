@@ -48,6 +48,14 @@ public class PlaceObject : MonoBehaviour
                 Pose pose = hit.pose;
 
                 GameObject obj = Instantiate(prefab, pose.position, pose.rotation);
+
+                if (Camera.main != null)
+                {
+                    Vector3 cameraPosition = Camera.main.transform.position;
+                    // Ensure the object's rotation is level on the y-axis, and it only rotates around the y-axis to face the camera
+                    cameraPosition.y = obj.transform.position.y; // This line makes the object rotate only around the y-axis
+                    obj.transform.LookAt(cameraPosition);
+                }
                 // Fixed size setting (example: 1x1x1 scale)
                 obj.transform.localScale = new Vector3(1f, 1f, 1f);
 

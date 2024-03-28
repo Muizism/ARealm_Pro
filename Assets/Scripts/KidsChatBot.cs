@@ -156,6 +156,8 @@ public class KidsChatBot : MonoBehaviour
     private AudioSource audioSource;
     private Color originalButtonColor;
     public TMP_Text text;
+    public Animator animator;
+   
    
 
 
@@ -176,7 +178,23 @@ public class KidsChatBot : MonoBehaviour
     
 
     }
-
+    private void Update()
+    {
+        if (audioSource.isPlaying && !animator.GetBool("IsPlaying"))
+        {
+            animator.SetBool("IsPlaying", true);
+            bool hasState = animator.HasState(0, Animator.StringToHash("lipSync"));
+            if (hasState)
+            {
+                animator.Play("Base Layer");
+                Debug.Log("Playing Base Layern.");
+            }
+            else
+            {
+                Debug.LogError("The animation state 'base layer is not  is layer.");
+            }
+        }
+    }
     public void OnStartSpeakingClick()
     {
         if (!isRecording)
@@ -281,7 +299,8 @@ public class KidsChatBot : MonoBehaviour
             AudioSource audioSource = GetComponent<AudioSource>();
             audioSource.clip = receivedClip;
             text.text = "Hafiz Umar speaking..";
-          
+            
+
             Debug.Log("Animator is enabled");
             audioSource.Play();
 
