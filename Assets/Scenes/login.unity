@@ -250,7 +250,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -178}
+  m_AnchoredPosition: {x: 0, y: -214}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &75850045
@@ -666,17 +666,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   virtualCursor: {fileID: 0}
---- !u!114 &465410103 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 114045031172512476, guid: 2c8d1949404e6c74f97f2d65cebd687d, type: 3}
-  m_PrefabInstance: {fileID: 465410099}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 465410101}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2da0c512f12947e489f739169773d7ca, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &485400805
 GameObject:
   m_ObjectHideFlags: 0
@@ -1211,7 +1200,7 @@ RectTransform:
   m_GameObject: {fileID: 732507295}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.55756676, y: 0.55756676, z: 0.55756676}
+  m_LocalScale: {x: 0.66105115, y: 0.66105115, z: 0.66105115}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1789153873}
@@ -1943,7 +1932,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 304, y: -443}
+  m_AnchoredPosition: {x: 304, y: -418}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1156695315
@@ -2637,7 +2626,7 @@ PrefabInstance:
     - target: {fileID: 114835938403400192, guid: e667a8f81bf8ebb4e8e15073ee7d697d, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1794322778}
     - target: {fileID: 114835938403400192, guid: e667a8f81bf8ebb4e8e15073ee7d697d, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
@@ -2652,7 +2641,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 114835938403400192, guid: e667a8f81bf8ebb4e8e15073ee7d697d, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
-      value: StartIEnumerator
+      value: OnLoginButtonClicked
+      objectReference: {fileID: 0}
+    - target: {fileID: 114835938403400192, guid: e667a8f81bf8ebb4e8e15073ee7d697d, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: dummmmy, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 114835938403400192, guid: e667a8f81bf8ebb4e8e15073ee7d697d, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
@@ -2776,10 +2769,10 @@ PrefabInstance:
       addedObject: {fileID: 1794322771}
     - targetCorrespondingSourceObject: {fileID: 1321367048756572, guid: e667a8f81bf8ebb4e8e15073ee7d697d, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1794322772}
+      addedObject: {fileID: 1794322777}
     - targetCorrespondingSourceObject: {fileID: 1321367048756572, guid: e667a8f81bf8ebb4e8e15073ee7d697d, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1794322777}
+      addedObject: {fileID: 1794322778}
   m_SourcePrefab: {fileID: 100100000, guid: e667a8f81bf8ebb4e8e15073ee7d697d, type: 3}
 --- !u!224 &1794322769 stripped
 RectTransform:
@@ -2804,22 +2797,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   virtualCursor: {fileID: 0}
---- !u!114 &1794322772
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1794322770}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fce1b775db15eb14bbaf96a51767241f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  emailInputObject: {fileID: 1877239292}
-  passwordInputObject: {fileID: 465410103}
-  loader: {fileID: 590550913}
-  loginMessageText: {fileID: 75850045}
 --- !u!114 &1794322777
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2836,19 +2813,21 @@ MonoBehaviour:
   - eventID: 4
     callback:
       m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 1794322772}
-          m_TargetAssemblyTypeName: GuardianLogin, Assembly-CSharp
-          m_MethodName: OnLoginButtonClicked
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
+        m_Calls: []
+--- !u!114 &1794322778
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1794322770}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 407e40fae267220488828757d154ccd2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  loginMessageText: {fileID: 75850045}
+  loader: {fileID: 590550913}
 --- !u!1 &1832230692
 GameObject:
   m_ObjectHideFlags: 0
@@ -3095,17 +3074,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   virtualCursor: {fileID: 0}
---- !u!114 &1877239292 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 114045031172512476, guid: 2c8d1949404e6c74f97f2d65cebd687d, type: 3}
-  m_PrefabInstance: {fileID: 1877239288}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1877239290}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2da0c512f12947e489f739169773d7ca, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

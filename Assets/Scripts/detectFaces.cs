@@ -7,21 +7,18 @@ using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 
-public class finalfacialrecognition : MonoBehaviour
+public class detectFaces : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI roomText;
-    [SerializeField] private TextMeshProUGUI time830_950Text;
-    [SerializeField] private GameObject scheduleCanvas;
+    [SerializeField] private TextMeshProUGUI username;
+    [SerializeField] private TextMeshProUGUI interests;
+    [SerializeField] private TextMeshProUGUI age;
+    [SerializeField] private TextMeshProUGUI type;
+    [SerializeField] private GameObject data;
     [SerializeField] private GameObject icon;
+    [SerializeField] public Text error;
 
 
-
-
-
-
-    private string awsLambdaEndpoint = "https://nwt9wmn64g.execute-api.us-east-1.amazonaws.com/default/ImageRecognition";
-  /*  string filePath = "C:\\Users\\Abdul Moiz\\Downloads\\check.jpg";*/
-
+    private string awsLambdaEndpoint = "https://yopit6ndtj.execute-api.us-east-1.amazonaws.com/default/face";
 
     void Update()
     {
@@ -37,17 +34,10 @@ public class finalfacialrecognition : MonoBehaviour
                 // Capture the screen when the touch begins
                 Debug.Log("Screen tapped, capturing screen...");
                 StartCoroutine(CaptureAndSendScreenshot());
-                /* StartCoroutine(SendImageFromFile());*/
-
-                // You can also perform other actions here if needed
-                scheduleCanvas.SetActive(true);
-                /* icon.SetActive(true);*/
+                data.SetActive(true);
             }
         }
     }
-
-
-
 
     private IEnumerator CaptureAndSendScreenshot()
     {
@@ -77,49 +67,10 @@ public class finalfacialrecognition : MonoBehaviour
         Debug.Log("Image captured and encoded to PNG format.");
         Debug.Log("Sending image to AWS Lambda...");
         yield return StartCoroutine(SendImageToAWSLambda(imageBytes));
-
-    }
-
- /*   private IEnumerator SendImageFromFile()
-    {
-        Debug.Log("Reading image from file...");
-        // Ensure the filePath is correct and accessible
-        if (File.Exists(filePath))
-        {
-            byte[] imageBytes = File.ReadAllBytes(filePath);
-            Debug.Log("Image read from file successfully.");
-
-            // Now send this imageBytes array to AWS Lambda
-            Debug.Log("Sending image to AWS Lambda...");
-            yield return StartCoroutine(SendImageToAWSLambda(imageBytes));
-        }
-        else
-        {
-            Debug.LogError($"File not found at path: {filePath}");
-        }
-    }*/
-    public void DisplayScheduleOnCanvas(Schedule schedule)
-    {
-        roomText.text = $"Room: {schedule.Room}";
-
-        foreach (var timeSlot in schedule.TimeSlots)
-        {
-            switch (timeSlot.Key)
-            {
-                case "08:30-09:50":
-                    time830_950Text.text = timeSlot.Value;
-                    break;
-
-
-
-            }
-
-        }
     }
 
     private IEnumerator SendImageToAWSLambda(byte[] imageBytes)
     {
-        
         using (UnityWebRequest www = new UnityWebRequest(awsLambdaEndpoint, "POST"))
         {
             www.uploadHandler = (UploadHandler)new UploadHandlerRaw(imageBytes);
@@ -131,40 +82,47 @@ public class finalfacialrecognition : MonoBehaviour
 
             if (www.result == UnityWebRequest.Result.Success)
             {
-                var schedule = JsonUtility.FromJson<Schedule>(www.downloadHandler.text);
-                string jsonResponse = www.downloadHandler.text.Trim('{', '}');
-                string[] jsonParts = jsonResponse.Split(',');
-                string formattedResponse = string.Join("\n\n", jsonParts);     
-                time830_950Text.text = formattedResponse;
-                DisplayScheduleOnCanvas(schedule);
+                string responseJson = www.downloadHandler.text;
                 Debug.Log("Image sent successfully!");
-                Debug.Log($"Response from AWS Lambda: {www.downloadHandler.text}");
+                Debug.Log($"Response from AWS Lambda: {responseJson}");
+
+                // Deserialize the response JSON
+                Schedule schedule = JsonUtility.FromJson<Schedule>(responseJson);
+
+                // Update UI elements with response data
+                username.text = schedule.Username;
+                age.text = schedule.Age;
+                type.text = schedule.Type;
+                interests.text = string.Join(", ", schedule.Interests);
+                error.text = responseJson;
+                Debug.Log(responseJson);
+
+                Debug.Log("UI updated with response data!");
             }
             else if (www.responseCode == 404)
             {
-                Debug.Log("No room information found.");
-                roomText.text = ("No room information found");
+                Debug.Log("No face found.");
             }
             else
             {
                 Debug.LogError($"Error sending image to AWS Lambda: {www.error}");
             }
         }
-
     }
+
     [Serializable]
     public class ImagePayload
     {
         public bool isBase64Encoded;
         public string body;
     }
+
     [Serializable]
     public class Schedule
     {
-        public string Room;
-        public Dictionary<string, string> TimeSlots = new Dictionary<string, string>();
+        public string Username;
+        public string Age;
+        public string Type;
+        public List<string> Interests;
     }
 }
-
-
-

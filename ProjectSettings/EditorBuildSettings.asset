@@ -14,14 +14,14 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/signup.unity
     guid: 5635435358066624c987d8cade93cd88
-  - enabled: 1
-    path: Assets/Scenes/HomeScreen.unity
+  - enabled: 0
+    path: Assets/Scenes/OCR.unity
     guid: 69f51d2561e7df548aad8728cea2b059
   - enabled: 0
     path: Assets/Scenes/Profile.unity
     guid: ebc7ea16ae5c9bc4aa66441b506da09c
   - enabled: 0
-    path: Assets/Scenes/Image Recognition.unity
+    path: Assets/Scenes/HomeScreen.unity
     guid: 9362ebd373db6594e81eb88d91f94939
   - enabled: 0
     path: Assets/Scenes/Edit Profile.unity
@@ -32,6 +32,12 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/Indoor Navigation.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
+  - enabled: 0
+    path: Assets/Scenes/IndoorNavigation.unity
+    guid: dd04550484d797c4c809bbcf257bd5cb
+  - enabled: 1
+    path: Assets/Scenes/FaceRecognition.unity
+    guid: 9d1ef97e6f1ed71498dd5518e56d0ce3
   m_configObjects:
     UnityEditor.XR.ARCore.ARCoreSettings: {fileID: 11400000, guid: 45fd4f9964cf7e94a89e3df265811801, type: 2}
     UnityEditor.XR.ARKit.ARKitSettings: {fileID: 11400000, guid: f36ad8329084e15469d03dc94c7fdf4e, type: 2}
