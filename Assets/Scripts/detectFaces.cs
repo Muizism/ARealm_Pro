@@ -14,11 +14,16 @@ public class detectFaces : MonoBehaviour
     [SerializeField] private TextMeshProUGUI age;
     [SerializeField] private TextMeshProUGUI type;
     [SerializeField] private GameObject data;
-    [SerializeField] private GameObject icon;
+    [SerializeField] private GameObject cancelButton;
     [SerializeField] public Text error;
 
 
     private string awsLambdaEndpoint = "https://yopit6ndtj.execute-api.us-east-1.amazonaws.com/default/face";
+    private void Start()
+    {
+        // Ensure that the cancel button is active at the start
+        cancelButton.SetActive(true);
+    }
 
     void Update()
     {
@@ -38,7 +43,12 @@ public class detectFaces : MonoBehaviour
             }
         }
     }
-
+    public void OnCancelButtonClick()
+    {
+        // Deactivate the data object and the cancel button itself
+        data.SetActive(false);
+        cancelButton.SetActive(false);
+    }
     private IEnumerator CaptureAndSendScreenshot()
     {
         yield return new WaitForEndOfFrame();

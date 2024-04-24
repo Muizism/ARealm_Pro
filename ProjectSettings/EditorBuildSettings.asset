@@ -5,31 +5,31 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/SplashScreen.unity
     guid: 22f1031a838f6144383df6a2a8d9ae7d
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/login.unity
     guid: c3402fb68d4363f4fbeb884b25e8a39d
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/signup.unity
     guid: 5635435358066624c987d8cade93cd88
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/OCR.unity
     guid: 69f51d2561e7df548aad8728cea2b059
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/Profile.unity
     guid: ebc7ea16ae5c9bc4aa66441b506da09c
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/HomeScreen.unity
     guid: 9362ebd373db6594e81eb88d91f94939
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/Edit Profile.unity
     guid: 7bd6d5b6e57ef794b8ae26f9cb0cefe7
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/Chatbot.unity
     guid: 32a5a89b29721884c8704c96ae493483
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/Indoor Navigation.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
   - enabled: 0

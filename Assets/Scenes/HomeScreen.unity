@@ -794,7 +794,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30d64e71c68bbb34e80208f768abd95c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneToLoad: IndoorNavigation
+  sceneToLoad: Indoor Navigation
 --- !u!114 &416971956
 MonoBehaviour:
   m_ObjectHideFlags: 0
