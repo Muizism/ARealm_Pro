@@ -98,7 +98,7 @@ public class detectFaces : MonoBehaviour
 
                 // Deserialize the response JSON
                 Schedule schedule = JsonUtility.FromJson<Schedule>(responseJson);
-
+                StartCoroutine(UpdateUIWithDelay(schedule, 5.0f));
                 // Update UI elements with response data
                 username.text = schedule.Username;
                 age.text = schedule.Age;
@@ -119,7 +119,19 @@ public class detectFaces : MonoBehaviour
             }
         }
     }
+    private IEnumerator UpdateUIWithDelay(Schedule schedule, float delay)
+    {
+        yield return new WaitForSeconds(delay);
 
+        // Update UI elements with response data
+        username.text = schedule.Username;
+        age.text = schedule.Age;
+        type.text = schedule.Type;
+        interests.text = string.Join(", ", schedule.Interests);
+        error.text = JsonUtility.ToJson(schedule, true);
+
+        Debug.Log("UI updated with response data after delay!");
+    }
     [Serializable]
     public class ImagePayload
     {
